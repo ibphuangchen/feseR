@@ -344,7 +344,14 @@ combineFS <- function(features, class, univariate = 'corr', mincorr = 0.3, n.per
             predictedClass <- predict(profile, newdata = testDescr)
 
             ## computing confussion matrix
-            confMatrix <- confusionMatrix(data = predictedClass$pred, reference = testClass)
+            ###this lines added by Chen###
+            #testClass is numeric, while predictedClass$pred is factor
+            numericPredic = as.numeric(levels(predictedClass$pred))[predictedClass$pred]
+            combineLevel = unique(c(numericPredic, testClass))
+            pred = factor(numericPredic, levels= combineLevel)
+            obs = factor(testClass, levels = combineLevel)
+            ############
+            confMatrix <- confusionMatrix(data = pred, reference = obs)
 
             ## building data frame with test phase stats
             test_stats <- rbind(test_stats, confMatrix$overall)
