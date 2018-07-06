@@ -133,6 +133,12 @@ filter.matrix.corr <- function(features, maxcorr = 0.75){
 
   # find correlated features
   highCorr <- caret::findCorrelation(descrCorr, maxcorr)
+  
+  #added by Chen
+  if(length(highCorr) == 0){
+    print("no features was removed")
+    return(as.matrix(features))
+  }
 
   # filter correlated features
   features <- features[, -highCorr]
